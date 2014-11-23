@@ -1,0 +1,33 @@
+PML course project
+-----
+
+## Data Process
+```{r}
+ setwd("C:\\Temp")
+library(ggplot2)
+library(caret)
+library(randomForest)
+traindata<-read.csv("pml-training.csv")
+testdata<-read.csv("pml-testing.csv") 
+good<-complete.cases(traindata)
+traindata<-traindata[good,]
+```
+
+## Data Slicing
+```{r}
+training<-createDataPartition(y=traindata$class,p=0.75,list=FALSE)
+intrain<-traindata[training,]
+intest<-traindata[-training,]
+```
+
+
+## Modelling
+```{r}
+set.seed(1010)
+fit <- train(classe ~ ., method = "rpart", data = intrain)
+pred<-predict(fit,intest)
+confusionMatrix(pred,intest$classe)
+```
+
+
+
